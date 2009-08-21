@@ -85,7 +85,6 @@ files:
 - lib/scruffy/layers.rb
 - lib/scruffy.rb
 - LICENCE.txt
-- History.txt
 - README.txt
 - CHANGES.txt
 - Manifest.txt
