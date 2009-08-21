@@ -2,7 +2,7 @@ module Scruffy::Components
 
   class Legend < Base
     FONT_SIZE = 80
-    
+
     def draw(svg, bounds, options={})
       vertical = options[:vertical_legend]
       legend_info = relevant_legend_info(options[:layers])
@@ -17,7 +17,9 @@ module Scruffy::Components
         @line_height = set_line_height
       end
 
-      text_height = @line_height * FONT_SIZE / 100
+      text_height = options[:theme].legend_font_size || (@line_height * FONT_SIZE / 100)
+      @line_height += text_height * 0.30
+
       # #TODO how does this related to @points?
       active_width, points = layout(legend_info, vertical)
 
@@ -34,28 +36,28 @@ module Scruffy::Components
           y = 0
           size = relative(50)
         end
-        
+
         # "#{x} #{y} #{@line_height} #{size}"
-        
-        svg.rect(:x => x, 
-          :y => y, 
-          :width => size, 
+
+        svg.rect(:x => x,
+          :y => y,
+          :width => size,
           :height => size,
           :fill => legend_info[idx][:color])
 
-        svg.text(legend_info[idx][:title], 
-          :x => x + @line_height, 
+        svg.text(legend_info[idx][:title],
+          :x => x + @line_height,
           :y => y + text_height * 0.75,
-          'font-size' => text_height, 
+          'font-size' => text_height,
           'font-family' => options[:theme].font_family,
           :style => "color: #{options[:theme].marker || 'white'}",
           :fill => (options[:theme].marker || 'white'))
       end
     end   # draw
-    
+
     protected
     # Collects Legend Info from the provided Layers.
-    # 
+    #
     # Automatically filters by legend's categories.
     def relevant_legend_info(layers, categories=(@options[:category] ? [@options[:category]] : @options[:categories]))
       legend_info = layers.inject([]) do |arr, layer|
@@ -70,11 +72,11 @@ module Scruffy::Components
         arr
       end
     end   # relevant_legend_info
-      
+
     # Returns an array consisting of the total width needed by the legend
     # information, as well as an array of @x-coords for each element. If
     # vertical, then these are @y-coords, and @x is 0
-    # 
+    #
     # ie: [200, [0, 50, 100, 150]]
     def layout(legend_info_array, vertical = false)
       if vertical
@@ -96,10 +98,10 @@ module Scruffy::Components
           enum[0] += (relative(50) * elem[:title].length)       # Add room for text
 
           [enum.first, enum.last]
-        end        
+        end
       end
     end
 
   end   # class Legend
-  
+
 end   # Scruffy::Components

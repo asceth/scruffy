@@ -2,11 +2,11 @@ module Scruffy
   module Components
 
     class DataMarkers < Base
-      
+
       include Scruffy::Helpers::Marker
-      
+
       attr_accessor :markers
-      
+
       def draw(svg, bounds, options={})
         if options[:calculate_markers] && (options[:point_markers].nil? || options[:point_markers].empty?)
           markers = (options[:markers] || self.markers) || 5
@@ -17,20 +17,20 @@ module Scruffy
         end
         unless options[:point_markers].nil?
           point_distance = bounds[:width] / (options[:point_markers].size - 1).to_f
-    
-          (0...options[:point_markers].size).map do |idx| 
+
+          (0...options[:point_markers].size).map do |idx|
             x_coord = point_distance * idx
             svg.text(options[:point_markers][idx],
               :x => x_coord,
-              :y => bounds[:height], 
-              'font-size' => relative(90),
+              :y => bounds[:height],
+              'font-size' => relative(options[:theme].data_marker_font_size) || relative(90),
               'font-family' => options[:theme].font_family,
-              :fill => (options[:theme].marker || 'white').to_s, 
+              :fill => (options[:theme].marker || 'white').to_s,
               'text-anchor' => 'middle') unless options[:point_markers][idx].nil?
           end
         end
       end   # draw
-      
+
     end   # class
 
   end
