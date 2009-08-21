@@ -20,7 +20,7 @@ module Scruffy::Renderers
     # Renders the graph and all components.
     def render(options = {})
       # Set the default size to a more suitable one
-      options[:size] = (options[:height] ? [(options[:height] * 0.55).to_i, options.delete(:height)] : [385, 700])
+      options[:size] ||= (options[:height] ? [(options[:height] * 0.55).to_i, options.delete(:height)] : [385, 700])
       super
     end
 
